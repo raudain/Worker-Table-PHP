@@ -1,0 +1,14 @@
+@charset "ISO-8859-1";
+
+p {
+	height: 63px;
+}
+
+p .field {
+	width: 70%;
+}
+
+#save {
+	border-width: thick!important;
+	border-style: outset!important;
+}

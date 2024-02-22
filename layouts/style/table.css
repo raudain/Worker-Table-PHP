@@ -1,0 +1,34 @@
+@charset "ISO-8859-1";
+
+.w3-container {
+	min-height: 1170px;
+}
+
+table {
+	display: inline-table;
+}
+
+th {
+	text-align: left;
+}
+
+a {
+	text-decoration: none;
+}
+
+.w3-hover-white:hover {
+	color: lightgray!important;
+}
+
+main {
+	min-height: 640px;
+}
+
+h1 {
+	font-family: Georgia;
+}
+
+img {
+	width: 600px;
+	height: 356.516px;
+}

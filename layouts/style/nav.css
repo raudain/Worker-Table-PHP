@@ -1,0 +1,26 @@
+@charset "UTF-8";
+
+li a {
+	text-decoration: none;
+}
+
+li {
+	margin-top: 9px;
+	margin-bottom: 9px;
+}
+
+.below-top {
+	margin-top: 7%;
+}
+
+@media only screen and (max-width: 1300px) {
+  .below-top {
+	  margin-top: 8%;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .below-top {
+	  margin-top: 12%;
+  }
+}
