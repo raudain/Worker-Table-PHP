@@ -54,74 +54,124 @@
 	
 </nav>
 
+<div class = "w3-container w3-display-container w3-margin-top">
+
+	<table class = "w3-table-all">
+		<thead>
+			<tr class = "w3-light-grey">
+				<th class = "w3-border">
+					Room
+					<a href = "Table?page=1">
+						<i class = "fa-solid fa-arrow-down-9-1"></i>
+					</a>
+					<form action = "Table" method = "POST">
+					<input type = "number" name = "page"
+					min = "1" max ="3"
+	 				class="w3-input w3-border w3-hover-red">
+	 				</form>
+				</th>
+				
+				<th class = "w3-border">Name</th>
+				<th class = "w3-border">Profession</th>
+				<th class = "w3-border">Endurance</th>
+				<th class = "w3-border">
+					Cost<a href = "Table?page=69">
+							<i class = "fa-solid fa-arrow-up-1-9"></i>
+						</a>
+				</th>
+			</tr>
+		</thead>
+
 <?php
-echo "<div class = \"w3-container w3-display-container w3-margin-top\">";
 
-echo 	"<table class = \"w3-table-all\">";
-echo		"<thead>";
-echo			"<tr class = \"w3-light-grey\">";
-echo				"<th class = \"w3-border\">";
-echo					"Room";
-echo					"<a href = \"Table?page=1\">";
-echo						"<i class = \"fa-solid fa-arrow-down-9-1\"></i>";
-echo					"</a>";
-echo					"<form action = \"Table\" method = \"POST\">";
-echo					"<input type = \"number\" name = \"page\"";
-echo					"min = \"1\" max = \"3\"";
-echo					"class=\"w3-input w3-border w3-hover-red\">";
-echo					"</form>";
-echo				"</th>";
-
-echo				"<th class = \"w3-border\">Name</th>";
-echo				"<th class = \"w3-border\">Profession</th>";
-echo				"<th class = \"w3-border\">Endurance</th>";
-echo				"<th class = \"w3-border\">";
-echo					"Cost";
-echo					"<a href = \"Table?page=69\">";
-echo						"<i class = \"fa-solid fa-arrow-up-1-9\"></i>";
-echo					"</a>";
-echo				"</th>";
-echo			"</tr>";
-echo		"</thead>";
-
-class TableRows extends RecursiveIteratorIterator {
-   function __construct($it) {
-	   parent::__construct($it, self::LEAVES_ONLY);
-   }
-
-   function current(): String {
-	   return "<td style='width: 150px; border: 1px solid black;'>" . parent::current(). "</td>";
-   }
-
-   #[\ReturnTypeWillChange]
-   function beginChildren() {
-	   echo "<tr>";
-   }
-
-   #[\ReturnTypeWillChange]
-   function endChildren() {
-	   echo "</tr>" . "\n";
-   }
-}
+require_once 'TableRows.php';
 
 $servername = "localhost";
 $username = "user";
 $password = "password";
 $dbname = "dbo";
+
 $workerList = null;
 try {
    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-   $stmt = $conn->prepare("SELECT Room, Name, Profession, Endurance, Cost FROM worker");
-   $stmt->execute();
+   $minimum = 500;
+	$maximum = 3000;
+   $stmt = $conn->prepare("SELECT Room
+   						   , 	  Name
+						   , 	  ProfessionName
+						   ,  	  EnduranceName
+						   , 	  Cost
+						   FROM vw_Worker_By_Room
+						   WHERE Room BETWEEN :minimum AND :maximum");
+	$stmt->bindParam(':minimum', $minimum);
+	$stmt->bindParam(':maximum', $maximum);
+	
+	/*$decrementPage = 899;
+	$minimum = 0;
+	$nextRoom = getNextRoom();
+	$maximum = $nextRoom;
+	connection = DataConnection.createConnection();
+	final byte offset1 = 97;
+	final short offset2 = 802;
+	final short offset3 = 803;
+	ArrayList<Worker> workerList = null;
+	try {
+		switch (page) {
+			case 1:
+				minimum = nextRoom - decrementPage;
+				if (nextRoom % 10 > 1) {
+					maximum = nextRoom - 1;
+				}
+				else {
+					maximum = nextRoom - (offset1 + 1);
+				}
+				break;
+			case 2:
+				minimum = nextRoom - (decrementPage * 2);
+				maximum = nextRoom - (decrementPage + 1);
+				break;
+			case 3:
+				minimum =
+						nextRoom - ((decrementPage * 3) - offset1);
+				maximum = nextRoom - ((decrementPage * 2) + 1);
+				  break;
+			case 4:
+				minimum =
+						nextRoom - ((decrementPage * 3) + offset2);
+				maximum =
+						nextRoom - (decrementPage * 3) + 1;
+				break;
+			case 5:
+				minimum =
+						nextRoom - ((decrementPage * 4) + offset2);
+				maximum =
+						nextRoom - ((decrementPage * 3) + offset3);
+				break;
+			case 6:
+				minimum =
+						nextRoom - ((decrementPage * 5) + offset2);
+				maximum =
+						nextRoom - ((decrementPage * 4) + offset3);
+			  break;
+			case 7:
+				minimum =
+						nextRoom - ((decrementPage * 6) + offset2);
+				maximum =
+						nextRoom - ((decrementPage * 5) + offset3);
+			  break;
+			default:
+				minimum = nextRoom;
+				maximum = 0;
+		}*/
+   	$stmt->execute();
 
-   // set the resulting array to associative
-   $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-   $workerList = $result;
+   	// set the resulting array to associative
+   	$workerList = $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
-   foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v) {
+   	foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v) {
 	   echo $v;
-   }
+   	}
 }
 catch(PDOException $e) {
    echo "Error: " . $e->getMessage();
