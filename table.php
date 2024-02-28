@@ -85,18 +85,19 @@
 <?php
 
 require_once 'TableRows.php';
+require_once 'doa/WorkerDAO.php';
 
 $servername = "localhost";
 $username = "user";
 $password = "password";
 $dbname = "dbo";
 
-$workerList = null;
 try {
+	/*
    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
    $minimum = 500;
-	$maximum = 3000;
+   $maximum = 3000;
    $stmt = $conn->prepare("SELECT Room
    						   , 	  Name
 						   , 	  ProfessionName
@@ -106,72 +107,22 @@ try {
 						   WHERE Room BETWEEN :minimum AND :maximum");
 	$stmt->bindParam(':minimum', $minimum);
 	$stmt->bindParam(':maximum', $maximum);
-	
-	/*$decrementPage = 899;
-	$minimum = 0;
-	$nextRoom = getNextRoom();
-	$maximum = $nextRoom;
-	connection = DataConnection.createConnection();
-	final byte offset1 = 97;
-	final short offset2 = 802;
-	final short offset3 = 803;
-	ArrayList<Worker> workerList = null;
-	try {
-		switch (page) {
-			case 1:
-				minimum = nextRoom - decrementPage;
-				if (nextRoom % 10 > 1) {
-					maximum = nextRoom - 1;
-				}
-				else {
-					maximum = nextRoom - (offset1 + 1);
-				}
-				break;
-			case 2:
-				minimum = nextRoom - (decrementPage * 2);
-				maximum = nextRoom - (decrementPage + 1);
-				break;
-			case 3:
-				minimum =
-						nextRoom - ((decrementPage * 3) - offset1);
-				maximum = nextRoom - ((decrementPage * 2) + 1);
-				  break;
-			case 4:
-				minimum =
-						nextRoom - ((decrementPage * 3) + offset2);
-				maximum =
-						nextRoom - (decrementPage * 3) + 1;
-				break;
-			case 5:
-				minimum =
-						nextRoom - ((decrementPage * 4) + offset2);
-				maximum =
-						nextRoom - ((decrementPage * 3) + offset3);
-				break;
-			case 6:
-				minimum =
-						nextRoom - ((decrementPage * 5) + offset2);
-				maximum =
-						nextRoom - ((decrementPage * 4) + offset3);
-			  break;
-			case 7:
-				minimum =
-						nextRoom - ((decrementPage * 6) + offset2);
-				maximum =
-						nextRoom - ((decrementPage * 5) + offset3);
-			  break;
-			default:
-				minimum = nextRoom;
-				maximum = 0;
-		}*/
-   	$stmt->execute();
 
+   	$stmt->execute();
+	/*
    	// set the resulting array to associative
    	$workerList = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-
+*/
+	$doa = new WorkerDAO();
+	$workerList = $doa->getWorkers($_GET['page']);
+	foreach(new TableRows(new RecursiveArrayIterator($workerList)) as $k=>$v) {
+		echo $v;
+	}
+	/*
    	foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v) {
 	   echo $v;
    	}
+	*/
 }
 catch(PDOException $e) {
    echo "Error: " . $e->getMessage();

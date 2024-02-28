@@ -28,20 +28,21 @@ class DataConnection {
 	 * @throws SQLException
 	 * 
 	 */
-	function createConnection() {
+	public static function createConnection() {
 		
-        $servername = getHost();
-        $dbname = getName();
-        $username = getUser();
-        $password = getPassword();
+        $servername = DatabaseCredentials::getHost();
+        $dbname = DatabaseCredentials::getName();
+        $username = DatabaseCredentials::getUser();
+        $password = DatabaseCredentials::getPassword();
         try {
             $connection = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
             // set the PDO error mode to exception
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             echo "Connected successfully";
           } catch(PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
           }
-		return connection;
+		return $connection;
 	}
 }
+?>
