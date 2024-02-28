@@ -87,45 +87,19 @@
 require_once 'TableRows.php';
 require_once 'doa/WorkerDAO.php';
 
-$servername = "localhost";
-$username = "user";
-$password = "password";
-$dbname = "dbo";
+$workerList = null;
 
 try {
-	/*
-   $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-   $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-   $minimum = 500;
-   $maximum = 3000;
-   $stmt = $conn->prepare("SELECT Room
-   						   , 	  Name
-						   , 	  ProfessionName
-						   ,  	  EnduranceName
-						   , 	  Cost
-						   FROM vw_Worker_By_Room
-						   WHERE Room BETWEEN :minimum AND :maximum");
-	$stmt->bindParam(':minimum', $minimum);
-	$stmt->bindParam(':maximum', $maximum);
-
-   	$stmt->execute();
-	/*
-   	// set the resulting array to associative
-   	$workerList = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-*/
 	$doa = new WorkerDAO();
 	$workerList = $doa->getWorkers($_GET['page']);
 	foreach(new TableRows(new RecursiveArrayIterator($workerList)) as $k=>$v) {
 		echo $v;
 	}
-	/*
-   	foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v) {
-	   echo $v;
-   	}
-	*/
 }
-catch(PDOException $e) {
-   echo "Error: " . $e->getMessage();
+catch(PDOException $exception) {
+	echo $exception->getMessage();
+	echo "<br>";
+	echo $exception->getTraceAsString();
 }
 $conn = null;
 echo "</table>";
@@ -144,91 +118,45 @@ if ($workerList == null) {
 	echo "</main>";
 } 
 ?>
-
-<div class = "w3-container w3-display-container w3-margin-top">
-
-	<table class = "w3-table-all">
-		<thead>
-			<tr class = "w3-light-grey">
-				<th class = "w3-border">
-					Room
-					<a href = "Table?page=1">
-						<i class = "fa-solid fa-arrow-down-9-1"></i>
-					</a>
-					<form action = "Table" method = "POST">
-					<input type = "number" name = "page"
-					min = "1" max ="3"
-	 				class="w3-input w3-border w3-hover-red">
-	 				</form>
-				</th>
-				
-				<th class = "w3-border">Name</th>
-				<th class = "w3-border">Profession</th>
-				<th class = "w3-border">Endurance</th>
-				<th class = "w3-border">
-					Cost<a href = "Table?page=69">
-							<i class = "fa-solid fa-arrow-up-1-9"></i>
-						</a>
-				</th>
-			</tr>
-		</thead>
-		<c:forEach var = "worker" items = "${workerList}">
-			<tr class = "w3-hover-red">
-				<td class = "w3-border">${worker.room}</td>
-				<td class = "w3-border">${worker.name}</td>
-				<td class = "w3-border">${worker.profession}</td>
-				<td class = "w3-border">${worker.endurance}</td>
-				<td class = "w3-border">
-					<fmt:formatNumber type = "number"
-					groupingUsed = "true" value = "${worker.cost}" />
-				</td>
-			</tr>
-		</c:forEach>
-	</table>
 	
-	<div class = "w3-bar w3-margin-top w3-display-bottommiddle w3-center">
+<div class = "w3-bar w3-margin-top w3-display-bottommiddle w3-center">
+	
+	<a id = "pageFirst" href = "Table?page=1"
+		class = "w3-button w3-hover-red w3-mobile">&laquo;
+	</a>
+	<a id = "arrowPrevious"
+		class = "w3-button w3-hover-red w3-mobile">&#60;
+	</a>
+	<a id = page1 href = "Table?page=1"
+		class = "w3-button w3-hover-red w3-mobile">1
+	</a>
+	<a id = page2 href = "Table?page=2"
+		class = "w3-button w3-hover-red w3-mobile">2
+	</a>
+	<a id = page3 href = "Table?page=3"
+		class = "w3-button w3-hover-red w3-mobile">3
+	</a>
+	<a id = page4 href = "Table?page=4"
+		class = "w3-button w3-hover-red w3-mobile">4
+	</a>
+	<a id = page5 href = "Table?page=5"
+		class = "w3-button w3-hover-red w3-mobile">5
+	</a>
+	<a id = page6 href = "Table?page=6"
+		class = "w3-button w3-hover-red w3-mobile">6
+	</a>
+	<a id = page7 href = "Table?page=7"
+		class = "w3-button w3-hover-red w3-mobile">7
+	</a>
+	<a id = "arrowNext"
+		class = "w3-button w3-hover-red w3-mobile"> &#62;
+	</a>
+	<a id = "pageLast" href = "Table?page=7"
+		class = "w3-button w3-hover-red w3-mobile">&raquo;
+	</a>
+	<script src = "javascript/table.js"></script>
 		
-		<a id = "pageFirst" href = "Table?page=1"
-			class = "w3-button w3-hover-red w3-mobile">&laquo;
-		</a>
-		<a id = "arrowPrevious"
-			class = "w3-button w3-hover-red w3-mobile">&#60;
-		</a>
-		<a id = page1 href = "Table?page=1"
-			class = "w3-button w3-hover-red w3-mobile">1
-		</a>
-		<a id = page2 href = "Table?page=2"
-			class = "w3-button w3-hover-red w3-mobile">2
-		</a>
-		<a id = page3 href = "Table?page=3"
-			class = "w3-button w3-hover-red w3-mobile">3
-		</a>
-		<a id = page4 href = "Table?page=4"
-			class = "w3-button w3-hover-red w3-mobile">4
-		</a>
-		<a id = page5 href = "Table?page=5"
-			class = "w3-button w3-hover-red w3-mobile">5
-		</a>
-		<a id = page6 href = "Table?page=6"
-			class = "w3-button w3-hover-red w3-mobile">6
-		</a>
-		<a id = page7 href = "Table?page=7"
-			class = "w3-button w3-hover-red w3-mobile">7
-		</a>
-		<a id = "arrowNext"
-			class = "w3-button w3-hover-red w3-mobile"> &#62;
-		</a>
-		<a id = "pageLast" href = "Table?page=7"
-			class = "w3-button w3-hover-red w3-mobile">&raquo;
-		</a>
-		<script src = "javascript/table.js"></script>
-		
-	</div>
-
 </div>
-</c:otherwise>
-	
-</c:choose>
 
 </body>
 
