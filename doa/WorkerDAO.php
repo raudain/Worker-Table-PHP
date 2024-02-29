@@ -128,12 +128,13 @@ class WorkerDAO {
 			}
 			if ($selectStatement != null) {
 				$preparedStatement = $connection->prepare($selectStatement);
-				$preparedStatement->bindParam(':minimum', $minimum);
-				$preparedStatement->bindParam(':maximum', $maximum);
+				$preparedStatement->bindValue(':minimum', $minimum);
+				$preparedStatement->bindValue(':maximum', $maximum);
 				if ($position > 0) {
 					$preparedStatement->bindParam(':position', $position);
 				}
 				$preparedStatement->execute();
+				$preparedStatement->setFetchMode(PDO::FETCH_ASSOC);
 				$workerList = $preparedStatement->fetchAll();
 			}
 		} catch(PDOException $exception) {

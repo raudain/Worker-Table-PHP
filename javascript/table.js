@@ -15,7 +15,11 @@ const arrowNext = document.getElementById("arrowNext");
  */
 
 let sort;
-if (page == "http://localhost:8080/BeggarOfficeJsp/Table?page=69"){
+/*
+	If we are on the "sort by cost" page then disable the link.
+	else disable the "sort by room" link if on that page
+*/
+if (page == "http://localhost:8080/BeggarOfficeJsp/table?page=69"){
 	sort = document.querySelectorAll("th a")[1];
 } else {
 	sort= document.querySelectorAll("th a")[0];

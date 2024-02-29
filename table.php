@@ -61,11 +61,11 @@
 			<tr class = "w3-light-grey">
 				<th class = "w3-border">
 					Room
-					<a href = "Table?page=1">
+					<a href = "table.php?page=1">
 						<i class = "fa-solid fa-arrow-down-9-1"></i>
 					</a>
-					<form action = "Table" method = "POST">
-					<input type = "number" name = "page"
+					<form action = "table.php" method = "POST">
+					<input type = "number" name = "position"
 					min = "1" max ="3"
 	 				class="w3-input w3-border w3-hover-red">
 	 				</form>
@@ -87,14 +87,47 @@
 require_once 'TableRows.php';
 require_once 'doa/WorkerDAO.php';
 
+$isGetRequest = count($_GET) > 0;
 $workerList = null;
-
 try {
 	$doa = new WorkerDAO();
-	$workerList = $doa->getWorkers($_GET['page']);
-	foreach(new TableRows(new RecursiveArrayIterator($workerList)) as $k=>$v) {
-		echo $v;
+	if ($isGetRequest) {
+		$page = $_GET['page'];
 	}
+	else {
+		$page = "1" . $_POST['position'];	
+	}
+	$workerList = $doa->getWorkers($page);
+	/*
+	//var_dump($workerList);
+	$servername = "localhost";
+	$username = "user";
+	$password = "password";
+	$dbname = "dbo";
+	$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+  	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  	$stmt = $conn->prepare("SELECT Room
+  	,      Name
+  	,      ProfessionName
+  	,      EnduranceName
+  	,      Cost
+  	FROM vw_worker_by_room
+  	WHERE Room BETWEEN :minimum AND :maximum;");
+  	$minimum = 5302;
+  	$maximum = 6103;
+  	$stmt->bindValue(':minimum', $minimum);
+  	$stmt->bindValue(':maximum', $maximum);
+  	$stmt->execute();
+
+  	// set the resulting array to associative
+  	$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+  	foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v) {
+    	echo $v;
+  	}
+	*/
+  	foreach(new TableRows(new RecursiveArrayIterator($workerList)) as $k=>$v) {
+    	echo $v;
+  	}
 }
 catch(PDOException $exception) {
 	echo $exception->getMessage();
