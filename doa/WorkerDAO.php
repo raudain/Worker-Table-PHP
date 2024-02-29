@@ -1,5 +1,4 @@
 <?php
-
 require_once 'DataConnection.php';
 
 /**
@@ -166,7 +165,7 @@ class WorkerDAO {
 			$preparedStatement = 
 					$connection->prepare($selectStatement);
 			$minimum = 0;
-			$nextRoom = this->getNextRoom();
+			$nextRoom = $this->getNextRoom();
 			$maximum = $nextRoom;
 			$preparedStatement->bindParam(':minimum', $minimum);
 			$preparedStatement->bindParam(':maximum', $maximum);

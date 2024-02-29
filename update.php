@@ -29,7 +29,7 @@ require_once 'header.php';
 	<h2>Worker</h2>
 </div>
 
-<form action = "Onboarding" method = "POST">
+<form action = "onboarding.php" method = "POST">
 
 	<p class = "w3-margin-left">
 		<label>Room</label>
