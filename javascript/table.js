@@ -4,22 +4,21 @@ const page = location.href;
  *	***************** Sort by Room Number Accending ****************
  */
 
-const length = page.length
-const pageNumber = page.substring((page.length - 1), page.length);
+const length = page.length;
+let pageNumber = page.substring((length- 1), page.length);
 const arrowPrevious = document.getElementById("arrowPrevious");
-const urlBase = "Table?page="
+const urlBase = "table.php?page="
 const arrowNext = document.getElementById("arrowNext");
 
 /* 
  *	***************** List Workers Sorted ****************
  */
-
-let sort;
 /*
 	If we are on the "sort by cost" page then disable the link.
 	else disable the "sort by room" link if on that page
 */
-if (page == "http://localhost:8080/BeggarOfficeJsp/table?page=69"){
+let sort;
+if (page == "http://localhost:3000/table.php?page=69"){
 	sort = document.querySelectorAll("th a")[1];
 } else {
 	sort= document.querySelectorAll("th a")[0];
@@ -33,24 +32,27 @@ sort.style.pointerEvents = "none";
 
 let link = document.getElementById("page1");
 switch (pageNumber) {
-  case "2":
-    link = document.getElementById("page2");
-    break;
-  case "3":
-     link = document.getElementById("page3");
-    break;
-  case "4":
-    link = document.getElementById("page4");
-    break;
-  case "5":
-    link = document.getElementById("page5");
-    break;
-  case "6":
-    link = document.getElementById("page6");
-    break;
-  case "7":
-    link = document.getElementById("page7");
-    break;
+	case "2":
+    	link = document.getElementById("page2");
+    	break;
+  	case "3":
+    	link = document.getElementById("page3");
+    	break;
+	case "4":
+    	link = document.getElementById("page4");
+    	break;
+	case "5":
+		link = document.getElementById("page5");
+    	break;
+	case "6":
+    	link = document.getElementById("page6");
+    	break;
+	case "7":
+    	link = document.getElementById("page7");
+    	break;
+	case "8":
+		link = document.getElementById("page8");
+		break;
 }
 link.className = "w3-button w3-yellow w3-hover-red";
 
@@ -58,7 +60,7 @@ link.className = "w3-button w3-yellow w3-hover-red";
  *	***************** Arrows Left ****************
  */
 
-if (page == "http://localhost:8080/BeggarOfficeJsp/Table?page=1"){
+if (page == "http://localhost:8080/BeggarOfficeJsp/table.php?page=1"){
 	const arrowFirst = document.getElementById("pageFirst");
 	arrowFirst.style.color = "lightgray";
 	arrowFirst.style.pointerEvents = "none";
@@ -87,7 +89,7 @@ function onePageBack() {
 
 arrowNext.addEventListener("click", onePageForward);
 function onePageForward() {
-	if (pageNumber != 7) {
+	if (pageNumber != 8) {
 		pageNumber++;
 		const pageNumberNext = pageNumber;
 		const pageNext = urlBase + pageNumberNext;
@@ -99,7 +101,7 @@ function onePageForward() {
  *	***************** Arrows Right ****************
  */
 
-if (page == "http://localhost:8080/BeggarOfficeJsp/Table?page=7"){
+if (page == "http://localhost:8080/BeggarOfficeJsp/table.php?page=7"){
 	const arrowLast = document.getElementById("pageLast");
 	arrowLast.style.color = "lightgray";
 	arrowLast.style.pointerEvents = "none";

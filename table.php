@@ -47,7 +47,7 @@ require_once 'header.php';
 				<th class = "w3-border">Profession</th>
 				<th class = "w3-border">Endurance</th>
 				<th class = "w3-border">
-					Cost<a href = "Table?page=69">
+					Cost<a href = "table.php?page=69">
 							<i class = "fa-solid fa-arrow-up-1-9"></i>
 						</a>
 				</th>
@@ -69,33 +69,6 @@ try {
 		$page = "1" . $_POST['position'];	
 	}
 	$workerList = $doa->getWorkers($page);
-	/*
-	//var_dump($workerList);
-	$servername = "localhost";
-	$username = "user";
-	$password = "password";
-	$dbname = "dbo";
-	$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-  	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  	$stmt = $conn->prepare("SELECT Room
-  	,      Name
-  	,      ProfessionName
-  	,      EnduranceName
-  	,      Cost
-  	FROM vw_worker_by_room
-  	WHERE Room BETWEEN :minimum AND :maximum;");
-  	$minimum = 5302;
-  	$maximum = 6103;
-  	$stmt->bindValue(':minimum', $minimum);
-  	$stmt->bindValue(':maximum', $maximum);
-  	$stmt->execute();
-
-  	// set the resulting array to associative
-  	$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-  	foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v) {
-    	echo $v;
-  	}
-	*/
   	foreach(new TableRows(new RecursiveArrayIterator($workerList)) as $k=>$v) {
     	echo $v;
   	}
@@ -125,37 +98,40 @@ if ($workerList == null) {
 	
 <div class = "w3-bar w3-margin-top w3-display-bottommiddle w3-center">
 	
-	<a id = "pageFirst" href = "Table?page=1"
+	<a id = "pageFirst" href = "table.php?page=1"
 		class = "w3-button w3-hover-red w3-mobile">&laquo;
 	</a>
 	<a id = "arrowPrevious"
 		class = "w3-button w3-hover-red w3-mobile">&#60;
 	</a>
-	<a id = page1 href = "Table?page=1"
+	<a id = page1 href = "table.php?page=1"
 		class = "w3-button w3-hover-red w3-mobile">1
 	</a>
-	<a id = page2 href = "Table?page=2"
+	<a id = page2 href = "table.php?page=2"
 		class = "w3-button w3-hover-red w3-mobile">2
 	</a>
-	<a id = page3 href = "Table?page=3"
+	<a id = page3 href = "table.php?page=3"
 		class = "w3-button w3-hover-red w3-mobile">3
 	</a>
-	<a id = page4 href = "Table?page=4"
+	<a id = page4 href = "table.php?page=4"
 		class = "w3-button w3-hover-red w3-mobile">4
 	</a>
-	<a id = page5 href = "Table?page=5"
+	<a id = page5 href = "table.php?page=5"
 		class = "w3-button w3-hover-red w3-mobile">5
 	</a>
-	<a id = page6 href = "Table?page=6"
+	<a id = page6 href = "table.php?page=6"
 		class = "w3-button w3-hover-red w3-mobile">6
 	</a>
-	<a id = page7 href = "Table?page=7"
+	<a id = page7 href = "table.php?page=7"
 		class = "w3-button w3-hover-red w3-mobile">7
+	</a>
+	<a id = page8 href = "table.php?page=8"
+		class = "w3-button w3-hover-red w3-mobile">8
 	</a>
 	<a id = "arrowNext"
 		class = "w3-button w3-hover-red w3-mobile"> &#62;
 	</a>
-	<a id = "pageLast" href = "Table?page=7"
+	<a id = "pageLast" href = "table.php?page=8"
 		class = "w3-button w3-hover-red w3-mobile">&raquo;
 	</a>
 	<script src = "javascript/table.js"></script>

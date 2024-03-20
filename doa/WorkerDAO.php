@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 require_once 'DataConnection.php';
 
 /**
@@ -22,25 +22,19 @@ class WorkerDAO {
 	function getWorkers($page):iterable {
 			
 		$decrementPage = 899;
-		$minimum = 0;
+		$minimum = 101;
 		$nextRoom = $this->getNextRoom();
 		$maximum = $nextRoom;
 		$position = 0;
 		$connection = DataConnection::createConnection();
-		$offset1 = 97;
-		$offset2 = 802;
-		$offset3 = 803;
+		$offset1 = 802;
+		$offset2 = 803;
+		$offset3 = 705;
 		$workerList = [];
 		try {
 			switch ($page) {
 				case 1:
 					$minimum = (int) $nextRoom - $decrementPage;
-					if ((int) $nextRoom % 10 > 1) {
-						$maximum = (int) $nextRoom - 1;
-					}
-					else {
-						$maximum = (int) $nextRoom - ($offset1 + 1);
-					}
 					break;
 				case 2:
 					$minimum = (int) $nextRoom - ($decrementPage * 2);
@@ -48,33 +42,37 @@ class WorkerDAO {
 					break;
 				case 3:
 					$minimum =
-						(int) $nextRoom - (($decrementPage * 3) - $offset1);
+						(int) $nextRoom - (($decrementPage * 3) - 97);
 					$maximum = (int) $nextRoom - (($decrementPage * 2) + 1);
 				  	break;
 				case 4:
 					$minimum =
-						(int) $nextRoom - (($decrementPage * 3) + $offset2);
+						(int) $nextRoom - (($decrementPage * 3) + $offset1);
 					$maximum =
 						(int) $nextRoom - ($decrementPage * 3) + 1;
 					break;
 				case 5:
 					$minimum =
-						(int) $nextRoom - (($decrementPage * 4) + $offset2);
+						(int) $nextRoom - (($decrementPage * 4) + $offset1);
 					$maximum =
-						(int) $nextRoom - (($decrementPage * 3) + $offset3);
+						(int) $nextRoom - (($decrementPage * 3) + $offset2);
 					break;
 				case 6:
 					$minimum =
-						(int) $nextRoom - (($decrementPage * 5) + $offset2);
+						(int) $nextRoom - (($decrementPage * 5) + $offset1);
 					$maximum =
-						(int) $nextRoom - (($decrementPage * 4) + $offset3);
+						(int) $nextRoom - (($decrementPage * 4) + $offset2);
 				  	break;
 				case 7:
 					$minimum =
-						(int) $nextRoom - (($decrementPage * 6) + $offset2);
+						(int) $nextRoom - (($decrementPage * 6) + $offset3);
 					$maximum =
-						(int) $nextRoom - (($decrementPage * 5) + $offset3);
+						(int) $nextRoom - (($decrementPage * 5) + $offset2);
 			      	break;
+				case 8:
+					$maximum =
+						(int) $nextRoom - (($decrementPage * 6) + $offset3 + 1);
+						break;
 				case 11:
 					$position = 1;
 			    	break;
@@ -89,7 +87,7 @@ class WorkerDAO {
 					$maximum = 0;
 			}
 			$selectStatement = null;
-			if ($page > 7) {
+			if ($page > 9) {
 				$minimum = 0;
 				$maximum = $nextRoom;
 				if ($page < 14) {
@@ -152,26 +150,19 @@ class WorkerDAO {
 	function getAllWorkers():iterable {
 		
 		$connection = DataConnection::createConnection();
-		$workerList = [];
 		try {
 			$selectStatement =
 				"SELECT Room
-				,      Name
-				,      ProfessionName
-				,      EnduranceName
-				,      Cost
-				FROM vw_worker_by_room
-				WHERE Room BETWEEN :minimum AND :maximum;";
+				 ,      Name
+				 ,      Profession
+				 ,      Endurance
+				 ,      Cost
+				 FROM worker";
 			$preparedStatement = 
 					$connection->prepare($selectStatement);
-			$minimum = 0;
-			$nextRoom = $this->getNextRoom();
-			$maximum = $nextRoom;
-			$preparedStatement->bindParam(':minimum', $minimum);
-			$preparedStatement->bindParam(':maximum', $maximum);
 			$preparedStatement->execute();
+			$preparedStatement->setFetchMode(PDO::FETCH_ASSOC);
 			$workerList = $preparedStatement->fetchAll();
-			$connection->close();
 		} catch (PDOException $exception) {
 			echo $exception->getMessage();
 			echo $exception->getTraceAsString();
@@ -187,19 +178,12 @@ class WorkerDAO {
 	 * @return ArrayList<Worker>
 	 *
 	 */
-	private function getWorkerList(iterable $resultSet):iterable {
+	private function getWorkerList(array $resultSet):iterable {
 
 		$workerList = [];
 		try {
 			foreach ($resultSet as $w) {
-				$worker = new Worker();
-
-				$worker->setRoom($w["Room"]);
-				$worker->setName($w["Name"]);
-				$worker->setProfession($w["ProfessionName"]);
-				$worker->setEndurance($w["EnduranceName"]);
-				$worker->setCost($w["Cost"]);
-
+				$worker = new Worker($resultSet);
 				$workerList = $worker;
 			}
 		} catch (PDOException $exception) {
@@ -221,7 +205,7 @@ class WorkerDAO {
 		$connection = DataConnection::createConnection();	
 		$selectStatement =
 			"SELECT Max(Room) AS LastRoom
-			FROM dbo.Worker;";
+			FROM worker;";
 		$statement = $this->getStatement($connection, $selectStatement);
 		$resultSet =
 				$this->getResultSet($statement);
@@ -275,11 +259,11 @@ class WorkerDAO {
 	 * @return void
 	 * 
 	 */
-	function insertWorker($worker) {
+	function insertWorker(Worker $worker) {
 		
 		$connection = DataConnection::createConnection();
 		$insertSqlStatement =
-			"INSERT INTO dbo.Worker
+			"INSERT INTO worker
 			(
 				Room
 			,	Name
@@ -295,7 +279,6 @@ class WorkerDAO {
 			$this->bindWorker($worker, $preparedStatement);
 	
 			$preparedStatement->execute();
-			$connection->close();
 		} catch (PDOException $exception) {
 			echo $exception->getMessage();
 			echo $exception->getTraceAsString();
@@ -317,7 +300,7 @@ class WorkerDAO {
 		// Create a new connection to the database
 		$connection = DataConnection::createConnection();
 		$updateStatement =
-			"UPDATE dbo.Worker
+			"UPDATE worker
 			SET Name = :Name
 			,   Profession = :Profession
 			,   Endurance = :Endurance
@@ -330,7 +313,6 @@ class WorkerDAO {
 			$this->bindWorker($worker, $preparedStatement);
 			
 			$preparedStatement->execute();
-			$connection->close();
 		} catch (PDOException $exception) {
 			echo $exception->getMessage();
 			echo $exception->getTraceAsString();

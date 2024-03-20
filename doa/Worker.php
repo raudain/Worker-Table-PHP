@@ -1,17 +1,25 @@
-<?php
+<?php declare(strict_types=1);
+
 class Worker {
     
-    private $room;
-    private $name;
-    private $profession;
-    private $endurance;
-    private $cost;
+    private int $room;
+    private String $name;
+    private int $profession;
+    private int $endurance;
+    private int $cost;
 
+    function __construct(array $workerArray) {
+        $this->room = (int) $workerArray["Room"];
+        $this->name = $workerArray["Name"];
+        $this->profession = (int) $workerArray["Profession"];
+        $this->endurance = (int) $workerArray["Endurance"];
+        $this->cost = (int) $workerArray["Cost"];
+    }
 
     /**
      * @return the room
      */
-    function getRoom() {
+    function getRoom() : int {
 
         return $this->room;
     }
@@ -20,7 +28,7 @@ class Worker {
 	/**
      * @param room the room to set
      */
-    function setRoom($room) {
+    function setRoom(string $room) : void {
 
         $this->room = $room;
     }
@@ -28,7 +36,7 @@ class Worker {
     /**
      * @return the name
      */
-    function getName() {
+    function getName() : String {
 
         return $this->name;
     }
@@ -36,7 +44,7 @@ class Worker {
     /**
      * @param name the name to set
      */
-    function setName($name) {
+    function setName($name) : void {
 
         $this->name = $name;
     }
@@ -44,7 +52,7 @@ class Worker {
     /**
      * @return the profession
      */
-    function getProfession() {
+    function getProfession() : int {
 
         return $this->profession;
     }
@@ -52,7 +60,7 @@ class Worker {
     /**
      * @param profession the profession to set
      */
-    function setProfession($profession) {
+    function setProfession($profession) : void {
 
         $this->profession = $profession;
     }
@@ -60,7 +68,7 @@ class Worker {
     /**
      * @return the endurance
      */
-    function getEndurance() {
+    function getEndurance() : int {
 
         return $this->endurance;
     }
@@ -68,7 +76,7 @@ class Worker {
     /**
      * @param endurance the endurance to set
      */
-    function setEndurance($endurance) {
+    function setEndurance($endurance) : void {
 
         $this->endurance = $endurance;
     }
@@ -76,7 +84,7 @@ class Worker {
     /**
      * @return the cost
      */
-    function getCost() {
+    function getCost() : int {
 
         return $this->cost;
     }
@@ -84,9 +92,14 @@ class Worker {
     /**
      * @param cost the cost to set
      */
-    function setCost($cost) {
+    function setCost($cost) : void {
 
         $this->cost = $cost;
     }
+
+    function toString(): String {
+		return $this->room . ", " . $this->name . ", " . $this->profession . ", " . $this->endurance
+				. ", " . $this->cost;
+	}
 }
 ?>
