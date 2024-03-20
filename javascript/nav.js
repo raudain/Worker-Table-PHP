@@ -1,9 +1,11 @@
-/* 
- *	***************** Menu Section Header ****************
- */
+const page = location.href;
 
+/* 
+ *	***************** Highlight Menu Buttons ****************
+ */
+ const url = page.substring(0, 31);
  const tableButton = document.getElementsByTagName("li")[1];
- if  (location.href == 'http://localhost:3000/table.php?page=1')
+ if  (url == 'http://localhost:3000/table.php')
  tableButton.className = "w3-bar-item w3-yellow w3-hover-red " + 
      "w3-round-large w3-margin-right w3-mobile";
 

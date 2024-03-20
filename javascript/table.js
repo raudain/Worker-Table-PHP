@@ -1,5 +1,3 @@
-const page = location.href;
-
 /* 
  *	***************** Sort by Room Number Accending ****************
  */
