@@ -18,6 +18,8 @@ const arrowNext = document.getElementById("arrowNext");
 let sort;
 if (page == "http://localhost:3000/table.php?page=69"){
 	sort = document.querySelectorAll("th a")[1];
+	const pageNavigation = document.getElementsByClassName("w3-display-bottommiddle")[0];
+	pageNavigation.style.display = "none";
 } else {
 	sort= document.querySelectorAll("th a")[0];
 }
